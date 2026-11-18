@@ -9,9 +9,14 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - run: unzip -q Pear-Music-0.3.5-android10.zip
-      - run: cd Pear-Music-0.3.5 && chmod +x gradlew && ./gradlew :app:assembleRelease --no-daemon
+      - run: unzip -q Pear-Music-0.3.5-android10.zip -d src
+      - run: |
+          D=$(dirname "$(find src -maxdepth 4 -name gradlew | head -1)")
+          echo "Folder proyek: $D"
+          cd "$D"
+          chmod +x gradlew
+          ./gradlew :app:assembleRelease --no-daemon
       - uses: actions/upload-artifact@v4
         with:
           name: PearMusic-apk
-          path: Pear-Music-0.3.5/app/build/outputs/apk/release/*.apk
+          path: src/**/app/build/outputs/apk/release/*.apk
